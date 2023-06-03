@@ -1,0 +1,16 @@
+{
+  "carros": [
+    {
+      "id": 1,
+      "name": "Narkevitz",
+      "email": "Narkevitz@gmail.com",
+      "cnpj": "23465721267434",
+      "telefone": "11940028922",
+      "endereco": "Rua Narkevitz, 334",
+      "estado": "São Paulo",
+      "cidade": "Itu",
+      "tForn": "Pessoa Física",
+      "termo": true
+    }
+  ]
+}
