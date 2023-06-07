@@ -1,0 +1,11 @@
+.status-ativado {
+    color: green;
+  }
+  
+  .status-desativado {
+    color: red;
+  }
+  
+  body {
+    padding: 0px;
+  }

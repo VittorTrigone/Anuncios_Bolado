@@ -11,15 +11,14 @@ import { CabecalhoComponent } from './cabecalho/cabecalho.component';
 import { NgxMaskModule } from "ngx-mask";
 import { CommonModule } from '@angular/common';
 
-import { CnpjMaskPipe } from './carros/cnpj-mask.pipe';
-import { TelefoneMaskPipe } from './carros/telefone-mask.pipe';
+import { DinheiroMaskPipe } from './carros/dinheiro-mask.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     CarrosComponent,
     PaginaInicialComponent,
-    CabecalhoComponent, CnpjMaskPipe, TelefoneMaskPipe
+    CabecalhoComponent, DinheiroMaskPipe
   ],
   imports: [
     BrowserModule,

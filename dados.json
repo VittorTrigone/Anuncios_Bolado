@@ -2,15 +2,30 @@
   "carros": [
     {
       "id": 1,
-      "name": "Narkevitz",
-      "email": "Narkevitz@gmail.com",
-      "cnpj": "23465721267434",
-      "telefone": "11940028922",
-      "endereco": "Rua Narkevitz, 334",
-      "estado": "São Paulo",
-      "cidade": "Itu",
-      "tForn": "Pessoa Física",
-      "termo": true
+      "titulo": "Bugatti Chiron",
+      "descricao": "Carro Bugatti Chiron ",
+      "preco": "R$ 51.480.557,79",
+      "validade": "2066-08-17",
+      "img": "https://s2.glbimg.com/BJwgAKNGxqIer8qmoK0HevFIb0k=/0x0:1984x1401/924x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_cf9d035bf26b4646b105bd958f32089d/internal_photos/bs/2023/n/8/Kb1LO8TYqK7cT9d9fvZQ/bugatti-chiron-profilee-4-.jpeg",
+      "status": "Ativado"
+    },
+    {
+      "id": 2,
+      "titulo": "Ferrari Enzo",
+      "descricao": "Carro Ferrari Enzo ...",
+      "preco": "R$ 19.000.000,00",
+      "validade": "2033-06-24",
+      "img": "https://s2.glbimg.com/gNn1M7JGehweBJsyVNNQNkhAYSg=/1200x/smart/filters:cover():strip_icc()/i.s3.glbimg.com/v1/AUTH_cf9d035bf26b4646b105bd958f32089d/internal_photos/bs/2020/l/c/709fBqRFmnrHIsEo96Eg/2020-06-05-catsferrari.jpg",
+      "status": "Ativado"
+    },
+    {
+      "id": 3,
+      "titulo": "Honda Civic",
+      "descricao": "Carro Honda Civic ...",
+      "preco": "R$ 244.900,00",
+      "validade": "2026-01-15",
+      "img": "https://image1.mobiauto.com.br/images/api/images/v1.0/206236951/transform/",
+      "status": "Desativado"
     }
   ]
 }

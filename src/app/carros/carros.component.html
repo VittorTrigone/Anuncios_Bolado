@@ -1,5 +1,5 @@
 <div class="text-center mb-5 mt-5">
-    <div class="display-6">Carro</div>
+    <div class="display-6">Carros</div>
     <div class="mb-5 mt-5"><button (click)="open(CadastrarCarro)" type="button" class="btn btn-outline-dark me-2"
             data-bs-toggle="modal" data-bs-target="#staticBackdrop">Cadastrar</button></div>
 </div>
@@ -9,30 +9,24 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Nome</th>
-                <th scope="col">Email</th>
-                <th scope="col">CNPJ</th>
-                <th scope="col">Telefone</th>
-                <th scope="col">Endereço</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Cidade</th>
-                <th scope="col">Tipo de Carro</th>
-                <th scope="col">Termos e Condições</th>
+                <th scope="col">Título</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Preço</th>
+                <th scope="col">Data de Validade (anúncio)</th>
+                <th scope="col">Imagem</th>
+                <th scope="col">Status do Anúncio</th>
                 <th scope="col" class="teste">Opções</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let carro of carros">
                 <td scope="row">{{ carro.id }}</td>
-                <td>{{ carro.name }}</td>
-                <td>{{ carro.email }}</td>
-                <td>{{ carro.cnpj | cnpjMask }}</td>
-                <td>{{ carro.telefone | telefoneMask }}</td>
-                <td>{{ carro.endereco }}</td>
-                <td>{{ carro.estado }}</td>
-                <td>{{ carro.cidade }}</td>
-                <td>{{ carro.tForn }}</td>
-                <td>{{ carro.termo ? 'Sim' : 'Não' }}</td>
+                <td>{{ carro.titulo }}</td>
+                <td>{{ carro.descricao }}</td>
+                <td>{{ carro.preco | dinheiroMask }}</td>
+                <td>{{ carro.validade}}</td>
+                <td>{{ carro.img.length > 20 ? carro.img.slice(0, 40) + '...' : carro.img }}</td>
+                <td>{{ carro.status }}</td>
                 <td>
                     <button (click)="open(EditarCarro)" class="btn btn-outline-primary me-1"
                         (click)="edit(carro)">Editar</button>
@@ -52,131 +46,69 @@
             <div class="col-8 m-auto">
                 <form [formGroup]="formGroupCarro">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Denominação Social:</label>
-                        <input type="text" formControlName="name" class="form-control" id="name"
+                        <label for="titulo" class="form-label">Título:</label>
+                        <input type="text" formControlName="titulo" class="form-control" id="titulo"
                             placeholder="Nome aqui.">
 
-                        <div *ngIf="submitted && name.invalid">
-                            <small class="text-danger">Nome Invalido! (Minímo 3 Caracteres)</small>
+                        <div *ngIf="submitted && titulo.invalid">
+                            <small class="text-danger">Título Invalido! (Minímo 3 Caracteres)</small>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email:</label>
-                        <input type="text" formControlName="email" class="form-control" id="email"
-                            placeholder="Email aqui.">
+                        <label for="descricao" class="form-label">Descrição:</label>
+                        <input type="text" formControlName="descricao" class="form-control" id="descricao"
+                            placeholder="Descrição aqui.">
 
-                            <div *ngIf="submitted && email.invalid">
-                                <small class="text-danger">Email Invalido!</small>
-                            </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="cnpj" class="form-label">CNPJ:</label>
-                        <input type="text" formControlName="cnpj" class="form-control" id="cnpj"
-                            placeholder="CNPJ aqui." mask="{{ cnpjMask }}">
-
-                        <div *ngIf="submitted && cnpj.invalid">
-                            <small class="text-danger">CNPJ Invalido!</small>
+                        <div *ngIf="submitted && descricao.invalid">
+                            <small class="text-danger">Descrição Invalido! (Minímo 20 Caracteres)</small>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="telefone" class="form-label">Telefone:</label>
-                        <input type="text" formControlName="telefone" class="form-control" id="telefone"
-                            placeholder="Telefone aqui." mask="{{ telefoneMask }}">
+                        <label for="preco" class="form-label">Preço:</label>
+                        <input type="text" formControlName="preco" class="form-control" id="preco"
+                            placeholder="Preço aqui." [(ngModel)]="valor" (input)="formatarValor($event)">
 
-                        <div *ngIf="submitted && telefone.invalid">
-                            <small class="text-danger">Telefone Invalido!</small>
+                        <div *ngIf="submitted && preco.invalid">
+                            <small class="text-danger">Preço Invalido!</small>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="endereco" class="form-label">Endereço:</label>
-                        <input type="text" formControlName="endereco" class="form-control" id="endereco"
-                            placeholder="Endereço aqui.">
+                        <label for="validade" class="form-label">Validade:</label>
+                        <input type="date" formControlName="validade" class="form-control" id="validade"
+                            placeholder="Validade aqui.">
 
-                            <div *ngIf="submitted && endereco.invalid">
-                                <small class="text-danger">Endereço Invalido!</small>
-                            </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="cidade" class="form-label">Cidade:</label>
-                        <input type="text" formControlName="cidade" class="form-control" id="cidade"
-                            placeholder="Cidade aqui.">
-
-                            <div *ngIf="submitted && cidade.invalid">
-                                <small class="text-danger">Cidade Invalida!</small>
-                            </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="estado" class="form-label">Estado:</label>
-                        <select class="form-select" aria-label="Default select example" formControlName="estado"
-                            id="estado">
-                            <option value="" disabled selected>Escolher</option>
-                            <option value="Acre">Acre</option>
-                            <option value="Alagoas">Alagoas</option>
-                            <option value="Amapá">Amapá</option>
-                            <option value="Amazonas">Amazonas</option>
-                            <option value="Bahia">Bahia</option>
-                            <option value="Ceará">Ceará</option>
-                            <option value="Distrito Federal">Distrito Federal</option>
-                            <option value="Espírito Santo">Espírito Santo</option>
-                            <option value="Goiás">Goiás</option>
-                            <option value="Maranhão">Maranhão</option>
-                            <option value="Mato Grosso">Mato Grosso</option>
-                            <option value="Mato Grosso do Sul">Mato Grosso do Sul</option>
-                            <option value="Minas Gerais">Minas Gerais</option>
-                            <option value="Pará">Pará</option>
-                            <option value="Paraíba">Paraíba</option>
-                            <option value="Paraná">Paraná</option>
-                            <option value="Pernambuco">Pernambuco</option>
-                            <option value="Piauí">Piauí</option>
-                            <option value="Rio de Janeiro">Rio de Janeiro</option>
-                            <option value="Rio Grande do Norte">Rio Grande do Norte</option>
-                            <option value="Rio Grande do Sul">Rio Grande do Sul</option>
-                            <option value="Rondônia">Rondônia</option>
-                            <option value="Roraima">Roraima</option>
-                            <option value="Santa Catarina">Santa Catarina</option>
-                            <option value="São Paulo">São Paulo</option>
-                            <option value="Sergipe">Sergipe</option>
-                            <option value="Tocantins">Tocantins</option>
-                        </select>
-
-                        <div *ngIf="submitted && estado.invalid">
-                            <small class="text-danger">Selecione um Estado!</small>
+                        <div *ngIf="submitted && validade.invalid">
+                            <small class="text-danger">Validade Invalida!</small>
                         </div>
                     </div>
-
                     <div class="mb-3">
-                        <label class="form-label">Tipo de Carro:</label>
+                        <label for="img" class="form-label">Imagem:</label>
+                        <input type="text" formControlName="img" class="form-control" id="img"
+                            placeholder="Imagem aqui.">
+
+                        <div *ngIf="submitted && img.invalid">
+                            <small class="text-danger">Imagem Invalida!</small>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status:</label>
                         <div class="form-check">
-                            <input formControlName="tForn" name="flexRadioDefault" class="form-check-input" type="radio"
-                                id="R1" value="Pessoa Física">
+                            <input formControlName="status" name="flexRadioDefault" class="form-check-input"
+                                type="radio" id="R1" value="Ativado">
                             <label class="form-check-label" for="R1">
-                                Pessoa Física
+                                Ativado
                             </label>
                         </div>
                         <div class="form-check">
-                            <input formControlName="tForn" name="flexRadioDefault" class="form-check-input" type="radio"
-                                id="R2" value="Pessoa Jurídica">
+                            <input formControlName="status" name="flexRadioDefault" class="form-check-input"
+                                type="radio" id="R2" value="Desativado">
                             <label class="form-check-label" for="R2">
-                                Pessoa Jurídica
+                                Desativado
                             </label>
                         </div>
 
-                        <div *ngIf="submitted && tForn.invalid">
+                        <div *ngIf="submitted && status.invalid">
                             <small class="text-danger">Selecione uma opção!</small>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Você aceita os Termos e Condições?</label>
-                        <div class="form-check">
-                            <input formControlName="termo" class="form-check-input" type="checkbox" id="C1">
-                            <label class="form-check-label">
-                                Aceitar
-                            </label>
-                        </div>
-
-                        <div *ngIf="submitted && termo.invalid">
-                            <small class="text-danger">Obrigatório!</small>
                         </div>
                     </div>
                 </form>
@@ -198,131 +130,69 @@
             <div class="col-8 m-auto">
                 <form [formGroup]="formGroupCarro">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Denominação Social:</label>
-                        <input type="text" formControlName="name" class="form-control" id="name"
+                        <label for="titulo" class="form-label">Título:</label>
+                        <input type="text" formControlName="titulo" class="form-control" id="titulo"
                             placeholder="Nome aqui.">
 
-                        <div *ngIf="submitted && name.invalid">
-                            <small class="text-danger">Nome Invalido! (Minímo 3 Caracteres)</small>
+                        <div *ngIf="submitted && titulo.invalid">
+                            <small class="text-danger">Título Invalido! (Minímo 3 Caracteres)</small>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email:</label>
-                        <input type="text" formControlName="email" class="form-control" id="email"
-                            placeholder="Email aqui.">
+                        <label for="descricao" class="form-label">Descrição:</label>
+                        <input type="text" formControlName="descricao" class="form-control" id="descricao"
+                            placeholder="Descrição aqui.">
 
-                            <div *ngIf="submitted && email.invalid">
-                                <small class="text-danger">Email Invalido!</small>
-                            </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="cnpj" class="form-label">CNPJ:</label>
-                        <input type="text" formControlName="cnpj" class="form-control" id="cnpj"
-                            placeholder="CNPJ aqui." mask="{{ cnpjMask }}">
-
-                        <div *ngIf="submitted && cnpj.invalid">
-                            <small class="text-danger">CNPJ Invalido!</small>
+                        <div *ngIf="submitted && descricao.invalid">
+                            <small class="text-danger">Descrição Invalido! (Minímo 20 Caracteres)</small>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="telefone" class="form-label">Telefone:</label>
-                        <input type="text" formControlName="telefone" class="form-control" id="telefone"
-                            placeholder="Telefone aqui." mask="{{ telefoneMask }}">
+                        <label for="preco" class="form-label">Preço:</label>
+                        <input type="text" formControlName="preco" class="form-control" id="preco"
+                            placeholder="Preço aqui." [(ngModel)]="valor" (input)="formatarValor($event)">
 
-                        <div *ngIf="submitted && telefone.invalid">
-                            <small class="text-danger">Telefone Invalido!</small>
+                        <div *ngIf="submitted && preco.invalid">
+                            <small class="text-danger">Preço Invalido!</small>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="endereco" class="form-label">Endereço:</label>
-                        <input type="text" formControlName="endereco" class="form-control" id="endereco"
-                            placeholder="Endereço aqui.">
+                        <label for="validade" class="form-label">Validade:</label>
+                        <input type="date" formControlName="validade" class="form-control" id="validade"
+                            placeholder="Validade aqui.">
 
-                            <div *ngIf="submitted && endereco.invalid">
-                                <small class="text-danger">Endereço Invalido!</small>
-                            </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="cidade" class="form-label">Cidade:</label>
-                        <input type="text" formControlName="cidade" class="form-control" id="cidade"
-                            placeholder="Cidade aqui.">
-
-                            <div *ngIf="submitted && cidade.invalid">
-                                <small class="text-danger">Cidade Invalida!</small>
-                            </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="estado" class="form-label">Estado:</label>
-                        <select class="form-select" aria-label="Default select example" formControlName="estado"
-                            id="estado">
-                            <option value="" disabled selected>Escolher</option>
-                            <option value="Acre">Acre</option>
-                            <option value="Alagoas">Alagoas</option>
-                            <option value="Amapá">Amapá</option>
-                            <option value="Amazonas">Amazonas</option>
-                            <option value="Bahia">Bahia</option>
-                            <option value="Ceará">Ceará</option>
-                            <option value="Distrito Federal">Distrito Federal</option>
-                            <option value="Espírito Santo">Espírito Santo</option>
-                            <option value="Goiás">Goiás</option>
-                            <option value="Maranhão">Maranhão</option>
-                            <option value="Mato Grosso">Mato Grosso</option>
-                            <option value="Mato Grosso do Sul">Mato Grosso do Sul</option>
-                            <option value="Minas Gerais">Minas Gerais</option>
-                            <option value="Pará">Pará</option>
-                            <option value="Paraíba">Paraíba</option>
-                            <option value="Paraná">Paraná</option>
-                            <option value="Pernambuco">Pernambuco</option>
-                            <option value="Piauí">Piauí</option>
-                            <option value="Rio de Janeiro">Rio de Janeiro</option>
-                            <option value="Rio Grande do Norte">Rio Grande do Norte</option>
-                            <option value="Rio Grande do Sul">Rio Grande do Sul</option>
-                            <option value="Rondônia">Rondônia</option>
-                            <option value="Roraima">Roraima</option>
-                            <option value="Santa Catarina">Santa Catarina</option>
-                            <option value="São Paulo">São Paulo</option>
-                            <option value="Sergipe">Sergipe</option>
-                            <option value="Tocantins">Tocantins</option>
-                        </select>
-
-                        <div *ngIf="submitted && estado.invalid">
-                            <small class="text-danger">Selecione um Estado!</small>
+                        <div *ngIf="submitted && validade.invalid">
+                            <small class="text-danger">Validade Invalida!</small>
                         </div>
                     </div>
-
                     <div class="mb-3">
-                        <label class="form-label">Tipo de Carro:</label>
+                        <label for="img" class="form-label">Imagem:</label>
+                        <input type="text" formControlName="img" class="form-control" id="img"
+                            placeholder="Imagem aqui.">
+
+                        <div *ngIf="submitted && img.invalid">
+                            <small class="text-danger">Imagem Invalida!</small>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status:</label>
                         <div class="form-check">
-                            <input formControlName="tForn" name="flexRadioDefault" class="form-check-input" type="radio"
-                                id="R1" value="Pessoa Física">
+                            <input formControlName="status" name="flexRadioDefault" class="form-check-input"
+                                type="radio" id="R1" value="Ativado">
                             <label class="form-check-label" for="R1">
-                                Pessoa Física
+                                Ativado
                             </label>
                         </div>
                         <div class="form-check">
-                            <input formControlName="tForn" name="flexRadioDefault" class="form-check-input" type="radio"
-                                id="R2" value="Pessoa Jurídica">
+                            <input formControlName="status" name="flexRadioDefault" class="form-check-input"
+                                type="radio" id="R2" value="Desativado">
                             <label class="form-check-label" for="R2">
-                                Pessoa Jurídica
+                                Desativado
                             </label>
                         </div>
 
-                        <div *ngIf="submitted && tForn.invalid">
+                        <div *ngIf="submitted && status.invalid">
                             <small class="text-danger">Selecione uma opção!</small>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Você aceita os Termos e Condições?</label>
-                        <div class="form-check">
-                            <input formControlName="termo" class="form-check-input" type="checkbox" id="C1">
-                            <label class="form-check-label">
-                                Aceitar
-                            </label>
-                        </div>
-
-                        <div *ngIf="submitted && termo.invalid">
-                            <small class="text-danger">Obrigatório!</small>
                         </div>
                     </div>
                 </form>

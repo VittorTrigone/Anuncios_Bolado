@@ -4,8 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DadosService } from '../dados.service';
 
-import { CnpjMaskPipe } from './cnpj-mask.pipe';
-
 @Component({
   selector: 'app-carros',
   templateUrl: './carros.component.html',
@@ -19,6 +17,40 @@ export class CarrosComponent {
   submitted: boolean = false;
   mostrarInput = false;
 
+  valor: string = '';
+
+  formatarValor(event: any) {
+    let valorDigitado = event.target.value;
+    valorDigitado = valorDigitado.replace(/\D/g, '');
+
+    if (valorDigitado.length === 0) {
+      event.target.value = '';
+      this.valor = '';
+      return;
+    }
+
+    let valorFormatado = '';
+    if (valorDigitado.length < 3) {
+      valorFormatado = `R$ ${valorDigitado.padStart(2, '0')}`;
+    } else {
+      const centavos = valorDigitado.slice(-2).padStart(2, '0');
+      const reais = valorDigitado.slice(0, -2).replace(/^0+/, '');
+
+      let partesReais = '';
+      for (let i = reais.length - 1; i >= 0; i--) {
+        partesReais = reais[i] + partesReais;
+        if ((reais.length - i) % 3 === 0 && i !== 0) {
+          partesReais = '.' + partesReais;
+        }
+      }
+
+      valorFormatado = `R$ ${partesReais},${centavos}`;
+    }
+
+    event.target.value = valorFormatado;
+    this.valor = valorFormatado;
+  }
+
   checkboxClicked() {
     if (!this.mostrarInput) {
       this.mostrarInput = true;
@@ -27,27 +59,22 @@ export class CarrosComponent {
     }
   }
 
-  telefoneMask = '(00) 0 0000-0000';
-  cnpjMask = '00.000.000/0000-00';
-
   constructor(
     private dadosService: DadosService,
     private formBuilder: FormBuilder,
     private modalService: NgbModal
-    ) {
+  ) {
     this.formGroupCarro = formBuilder.group({
       id: [''],
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
-      cnpj: ['', [Validators.required]],
-      telefone: ['', [Validators.required]],
-      endereco: ['', Validators.required],
-      estado: ['', [Validators.required]],
-      cidade: ['', [Validators.required]],
-      tForn: ['', [Validators.required]],
-      termo: ['', [Validators.required]]
+      titulo: ['', [Validators.required, Validators.minLength(3)]],
+      descricao: ['', [Validators.required, Validators.minLength(20)]],
+      preco: ['', [Validators.required]],
+      validade: ['', [Validators.required]],
+      img: ['', Validators.required],
+      status: ['', [Validators.required]]
     })
   }
+
 
   ngOnInit(): void {
     this.loadCarros();
@@ -109,36 +136,29 @@ export class CarrosComponent {
   open(content: any) {
     this.modalService.open(content, {
       centered: true,
-      size: 'xl' // Defina o tamanho desejado, por exemplo, 'xl' para extra large
+      size: 'xl', // Defina o tamanho desejado, por exemplo, 'xl' para extra large
+      backdrop: 'static' // Evita que o modal seja fechado ao clicar fora dele
     });
   }
 
-  get name(): any {
-    return this.formGroupCarro.get("name")
+
+  get titulo(): any {
+    return this.formGroupCarro.get("titulo")
   }
-  get email(): any {
-    return this.formGroupCarro.get("email")
+  get descricao(): any {
+    return this.formGroupCarro.get("descricao")
   }
-  get cnpj(): any {
-    return this.formGroupCarro.get("cnpj")
+  get preco(): any {
+    return this.formGroupCarro.get("preco")
   }
-  get telefone(): any {
-    return this.formGroupCarro.get("telefone")
+  get validade(): any {
+    return this.formGroupCarro.get("validade")
   }
-  get endereco(): any {
-    return this.formGroupCarro.get("endereco")
+  get img(): any {
+    return this.formGroupCarro.get("img")
   }
-  get estado(): any {
-    return this.formGroupCarro.get("estado")
-  }
-  get cidade(): any {
-    return this.formGroupCarro.get("cidade")
-  }
-  get tForn(): any {
-    return this.formGroupCarro.get("tForn")
-  }
-  get termo(): any {
-    return this.formGroupCarro.get("termo")
+  get status(): any {
+    return this.formGroupCarro.get("status")
   }
 
   fecharModal() {
@@ -146,5 +166,6 @@ export class CarrosComponent {
     this.formGroupCarro.reset();
     this.formGroupCarro.get('estado')?.setValue(''); // Define o valor do campo "estado" como vazio
     this.submitted = false;
+    this.isEditing = false;
   }
 }
